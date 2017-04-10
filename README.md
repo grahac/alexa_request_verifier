@@ -3,7 +3,7 @@
 ## Description
 Alexa Request Verifier is a library that handles all of the certificate and request verification for Alexa Requests for certified skills. (See the [Alexa Skills Documentation](https://developer.amazon.com/public/solutions/alexa/alexa-skills-kit/docs/developing-an-alexa-skill-as-a-web-service) for more information)  
 
-Specifically, it will
+Specifically, it will:
 * Confirm the URL for the certificate is a valid Alexa URL
 * Validate the certificate is valid
 * Confirm the request is recent (to avoid playback attacks)
@@ -30,7 +30,7 @@ You will also need to modify your Endpoint.ex file by changing the parser as fol
 
 Finally, you will need to add AlexaRequestVerifier as an application.
 
-applications: [..., :alexa_request_verifier] 
+    applications: [..., :alexa_request_verifier] 
 
 
 Documentation can be generated with [ExDoc](https://github.com/elixir-lang/ex_doc)
