@@ -221,9 +221,16 @@ end
 
    message = conn.private[:raw_body]
    [signature] = Plug.Conn.get_req_header(conn, @sig_header)
+   {:ok, signature} = Base.decode64(signature)
    [first|_tail] = conn.private[:signing_cert]
-   
-   if(:public_key.verify(message, :sha, signature, first)) do
+    decoded = :public_key.pkix_decode_cert(first,:otp)
+
+    public_key_der = decoded |> elem(1) |> elem(7) |> elem(2)
+
+
+
+
+   if(:public_key.verify(message, :sha, signature, public_key_der)) do
     conn
    else
     Conn.put_private(conn, :alexa_verify_error, "signature did not match" )
