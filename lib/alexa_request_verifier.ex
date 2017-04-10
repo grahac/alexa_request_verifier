@@ -81,7 +81,7 @@ end
   end
 
 
-  def is_correct_alexa_url?(url =%URI{port: 443, host: "s3.amazonaws.com", scheme: "https", path: "/echo.api/" <> _extra}) do
+  def is_correct_alexa_url?(%URI{port: 443, host: "s3.amazonaws.com", scheme: "https", path: "/echo.api/" <> _extra}) do
       true  
   end
 
@@ -109,14 +109,14 @@ end
   def verify_fun(_, {:extension, _}, state) do
     {:unknown, state}
   end
-  def verify_fun(_, {:bad_cert, reason}, state) do
+  def verify_fun(_, {:bad_cert, reason}, _state) do
     {:fail, reason}
   end
-  def verify_fun(_, {:revoked, _}, state) do
+  def verify_fun(_, {:revoked, _}, _state) do
     {:fail, :revoked}
   end
 
-  def verify_fun(_cert, event, state) do
+  def verify_fun(_cert, _event, state) do
     {:unknown, state}
   end
 
@@ -139,9 +139,8 @@ end
 
     case :public_key.pkix_path_validation(root_cer, Enum.reverse(cert),
           [{:verify_fun, {&__MODULE__.verify_fun/3, {}}}]) do
-      {:ok, {public_key_info, _policy_tree}} ->
+      {:ok, {_public_key_info, _policy_tree}} ->
         
-
 
       # IO.inspect public_key_info
         {:ok, cert}
@@ -162,7 +161,7 @@ end
       |> validate_cert_domain
  end
 
-  def validate_cert_domain(error = {:error, reason}) do 
+  def validate_cert_domain(error = {:error, _reason}) do 
     error  
   end
 

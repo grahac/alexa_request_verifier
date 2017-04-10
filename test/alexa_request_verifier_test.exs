@@ -11,8 +11,9 @@ defmodule AlexaRequestVerifierTest do
     conn = %Plug.Conn{}
     conn = Plug.Conn.put_req_header(conn, "signaturecertchainurl", cert_url )
     conn = AlexaRequestVerifier.get_validated_cert(conn)
-    assert ConCache.get(:cert_signature_cache, cert_url) == conn.private[:signing_cert]
-    cert = AlexaRequestVerifier.get_validated_cert(conn)
+    cert = conn.private[:signing_cert]
+    assert ConCache.get(:cert_signature_cache, cert_url) == cert
+    assert AlexaRequestVerifier.get_validated_cert(conn).private[:signing_cert] == cert
   end
 
   test "load, bad cert and test no caching " do 
@@ -33,13 +34,11 @@ defmodule AlexaRequestVerifierTest do
     assert String.contains?(conn.private[:alexa_verify_error], "no request parameter")
   end
 
-  test "test " do
-    assert true 
-  end
-
 
   test "verify message" do
     assert true 
+    # to add later -- add validation that message verification is working. 
+
   end
 
 
