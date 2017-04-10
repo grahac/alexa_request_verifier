@@ -5,7 +5,7 @@ defmodule AlexaRequestVerifier.Mixfile do
     [
       files: ["lib", "mix.exs", "README.md", "LICENSE"],
       maintainers: ["Charlie Graham"],
-      licenses: ["MIT],
+      licenses: ["MIT"],
       links: %{"GitHub" => "https://github.com/grahac/alexa_request_verifier"}
     ]
   end
