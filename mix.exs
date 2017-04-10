@@ -1,15 +1,6 @@
 defmodule AlexaRequestVerifier.Mixfile do
   use Mix.Project
 
-  defp package do
-    [
-      name: :alexa_request_verifier,
-      files: ["lib", "mix.exs", "README*", "LICENSE*"],
-      maintainers: ["Charlie Graham"],
-      licenses: ["Apache 2.0"],
-      links: %{"GitHub" => "https://github.com/grahac/alexa_request_verifier"}
-    ]
-  end
 
   def project do
     [app: :alexa_request_verifier,
@@ -17,6 +8,8 @@ defmodule AlexaRequestVerifier.Mixfile do
      elixir: "~> 1.4",
      build_embedded: Mix.env == :prod,
      start_permanent: Mix.env == :prod,
+     description: description(),
+     package: package(),
      deps: deps()]
   end
 
@@ -49,6 +42,17 @@ defmodule AlexaRequestVerifier.Mixfile do
     {:phoenix, "~> 1.2.3"}, 
     {:con_cache, "~> 0.12.0"},
 
+    ]
+  end
+
+
+  defp package do
+    [
+      name: :alexa_request_verifier,
+      files: ["lib", "mix.exs", "README*", "LICENSE*"],
+      maintainers: ["Charlie Graham"],
+      licenses: ["Apache 2.0"],
+      links: %{"GitHub" => "https://github.com/grahac/alexa_request_verifier"}
     ]
   end
 end
