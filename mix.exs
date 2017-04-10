@@ -1,6 +1,15 @@
 defmodule AlexaRequestVerifier.Mixfile do
   use Mix.Project
 
+  defp package do
+    [
+      files: ["lib", "mix.exs", "README.md", "LICENSE"],
+      maintainers: ["Charlie Graham"],
+      licenses: ["MIT],
+      links: %{"GitHub" => "https://github.com/grahac/alexa_request_verifier"}
+    ]
+  end
+
   def project do
     [app: :alexa_request_verifier,
      version: "0.1.0",
@@ -15,7 +24,7 @@ defmodule AlexaRequestVerifier.Mixfile do
   # Type "mix help compile.app" for more information
   def application do
     # Specify extra applications you'll use from Erlang/Elixir
-    [extra_applications: [:logger],
+    [extra_applications: [:logger, :con_cache],
      mod: {AlexaRequestVerifier.Application, []}]
   end
 
