@@ -3,9 +3,10 @@ defmodule AlexaRequestVerifier.Mixfile do
 
   defp package do
     [
-      files: ["lib", "mix.exs", "README.md", "LICENSE"],
+      name: :alexa_request_verifier,
+      files: ["lib", "mix.exs", "README*", "LICENSE*"],
       maintainers: ["Charlie Graham"],
-      licenses: ["MIT"],
+      licenses: ["Apache 2.0"],
       links: %{"GitHub" => "https://github.com/grahac/alexa_request_verifier"}
     ]
   end
@@ -26,6 +27,12 @@ defmodule AlexaRequestVerifier.Mixfile do
     # Specify extra applications you'll use from Erlang/Elixir
     [extra_applications: [:logger, :con_cache],
      mod: {AlexaRequestVerifier.Application, []}]
+  end
+
+ defp description do
+    """
+    Alexa Request Verifier is a library that handles all of the certificate and request verification for Alexa Requests for certified skills. (See the Alexa Skills Documentation for more information).
+    """
   end
 
   # Dependencies can be Hex packages:
