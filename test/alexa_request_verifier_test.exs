@@ -35,11 +35,6 @@ defmodule AlexaRequestVerifierTest do
   end
 
 
-  test "verify message" do
-    assert true 
-    # to add later -- add validation that message verification is working. 
-
-  end
 
 
   test "is_datetime_valid tests " do 
