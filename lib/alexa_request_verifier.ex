@@ -8,7 +8,7 @@ To add the request, you will need to make 4 changes:
 
 
     def deps do
-      [{:alexa_request_verifier, "~> 0.1.2"}]
+      [{:alexa_request_verifier, "~> 0.1.3"}]
     end
 
 2. You will need to add AlexaRequestVerifier as an application in your mix.js
@@ -46,7 +46,6 @@ The parser is needed to collect the raw body of the request as that is needed to
 
 
   def call(conn, _opts) do
-    Logger.debug("is in test mode: #{conn.private[:alexa_verify_test_disable]}")
 
      case conn.private[:alexa_verify_test_disable] do
        true ->
@@ -59,7 +58,7 @@ The parser is needed to collect the raw body of the request as that is needed to
       |> verify_signature
         
       if conn.private[:alexa_verify_error] do 
-        Logger.debug("alexa_verify_error: #{conn.private[:alexa_verify_error]}")
+        Logger.debug("alexa_request_verifier: #{conn.private[:alexa_verify_error]}")
         conn
           |> send_resp(401, conn.private[:alexa_verify_error])
           |> halt
@@ -83,13 +82,13 @@ The parser is needed to collect the raw body of the request as that is needed to
         case validate_cert(cert) do
 
         {:ok, _} ->
-            Logger.debug("setting cache for #{cert_url}")
+            Logger.debug("alexa_request_verifier: setting cache for #{cert_url}")
             ConCache.put(:cert_signature_cache, cert_url, cert)
 
             Conn.put_private(conn,:signing_cert, cert)
               
         {:error, reason} ->
-            Logger.debug("got error: #{reason}")
+            Logger.debug("alexa_request_verifier: got error -  #{reason}")
             Conn.put_private(conn, :alexa_verify_error, reason )
               
           end
@@ -265,7 +264,7 @@ end
 
       public_key_der = decoded |> elem(1) |> elem(7) |> elem(2)
      if(:public_key.verify(message, :sha, signature, public_key_der)) do
-      Logger.debug("AlexaRequestVerifier: Signature of Alexa request is valid for this message.")
+      Logger.debug("alexa_request_verifier: Signature of Alexa request is valid for this message.")
 
       conn
      else

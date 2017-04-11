@@ -19,7 +19,7 @@ by adding `alexa_request_verifier` to your list of dependencies in `mix.exs`:
 
 ```elixir
 def deps do
-  [{:alexa_request_verifier, "~> 0.1.2"}]
+  [{:alexa_request_verifier, "~> 0.1.3"}]
 end
 ```
 2.You will need to add AlexaRequestVerifier as an application in the same mix.exs file.
