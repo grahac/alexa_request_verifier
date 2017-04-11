@@ -249,7 +249,7 @@ end
   def verify_signature(conn) do
 
    message = conn.private[:raw_body]
-   case sig_list = Plug.Conn.get_req_header(conn, @sig_header) do
+   case Plug.Conn.get_req_header(conn, @sig_header) do
      []  ->   Conn.put_private(conn, :alexa_verify_error, "no signature" )
      [signature] ->
      {:ok, signature} = Base.decode64(signature)
