@@ -23,20 +23,22 @@ def deps do
 end
 ```
 2.You will need to add AlexaRequestVerifier as an application in the same mix.exs file.
-
-    applications: [..., :alexa_request_verifier] 
-
+```elixir
+applications: [..., :alexa_request_verifier] 
+```
 
 3. You will also need to modify your endpoint.ex file by changing the parser as follows:
-
-    parsers: [AlexaRequestVerifier.JSONRawBodyParser, :urlencoded, :multipart, :json],
+```elixir
+parsers: [AlexaRequestVerifier.JSONRawBodyParser, :urlencoded, :multipart, :json],
+```
 
 4. You will need to add the verifier plug to your pipeline in your router.ex file
-
-      pipeline :alexa_api do
-          plug :accepts, ["json"]
-          plug AlexaRequestVerifier
-      end
+```elixir
+pipeline :alexa_api do
+    plug :accepts, ["json"]
+    plug AlexaRequestVerifier
+end
+```
 
 ## Kudos
 A big thanks to the Elixir Forum for helping me navigate all of the Erlang :public_key libraries.  [Forum thread](https://elixirforum.com/t/x-509-request-cert-chain-validation-plug-for-alexa-skills/4463/23).
