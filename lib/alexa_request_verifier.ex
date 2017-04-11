@@ -8,7 +8,7 @@ To add the request, you will need to make 4 changes:
 
 
     def deps do
-      [{:alexa_request_verifier, "~> 0.1.1"}]
+      [{:alexa_request_verifier, "~> 0.1.2"}]
     end
 
 2. You will need to add AlexaRequestVerifier as an application in your mix.js
@@ -40,26 +40,35 @@ The parser is needed to collect the raw body of the request as that is needed to
   require Logger
  @amazon_echo_dns "echo-api.amazon.com"
  @sig_header  "signature"
-@sig_chain_header "signaturecertchainurl"
+ @sig_chain_header "signaturecertchainurl"
 
   def init(opts), do: opts
 
 
   def call(conn, _opts) do
+    Logger.debug("is in test mode: #{conn.private[:alexa_verify_test_disable]}")
+
+     case conn.private[:alexa_verify_test_disable] do
+       true ->
+        conn
+       _ ->
+
+      conn = conn  
+      |> get_validated_cert
+      |> verify_time
+      |> verify_signature
         
-    conn = conn  
-    |> get_validated_cert
-    |> verify_time
-    |> verify_signature
-      
-    if conn.private[:alexa_verify_error] do 
-      Logger.debug("alexa_verify_error: #{conn.private[:alexa_verify_error]}")
-      conn
-        |> send_resp(401, conn.private[:alexa_verify_error])
-        |> halt
-    else
-      conn
-      end
+      if conn.private[:alexa_verify_error] do 
+        Logger.debug("alexa_verify_error: #{conn.private[:alexa_verify_error]}")
+        conn
+          |> send_resp(401, conn.private[:alexa_verify_error])
+          |> halt
+      else
+        conn
+        end
+     end   
+
+
   end
 
   def get_validated_cert(conn) do

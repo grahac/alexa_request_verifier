@@ -2,15 +2,11 @@ defmodule AlexaRequestVerifierTest do
   use ExUnit.Case
   doctest AlexaRequestVerifier
 
-  test "the truth" do
-    assert 1 + 1 == 2
-  end
-
   test "load, verified cert and test caching " do 
     cert_url = "https://s3.amazonaws.com/echo.api/echo-api-cert-4.pem"
     conn = %Plug.Conn{}
-    conn = Plug.Conn.put_req_header(conn, "signaturecertchainurl", cert_url )
-    conn = AlexaRequestVerifier.get_validated_cert(conn)
+    |> Plug.Conn.put_req_header("signaturecertchainurl", cert_url )
+    |> AlexaRequestVerifier.get_validated_cert
     cert = conn.private[:signing_cert]
     assert ConCache.get(:cert_signature_cache, cert_url) == cert
     assert AlexaRequestVerifier.get_validated_cert(conn).private[:signing_cert] == cert
@@ -19,8 +15,8 @@ defmodule AlexaRequestVerifierTest do
   test "load, bad cert and test no caching " do 
     cert_url = "https://s3.amazonaws.com/echo.api/echo-api-cert.pem"
     conn = %Plug.Conn{}
-    conn = Plug.Conn.put_req_header(conn, "signaturecertchainurl", cert_url)
-    conn = AlexaRequestVerifier.get_validated_cert(conn)
+    |> Plug.Conn.put_req_header("signaturecertchainurl", cert_url)
+    |> AlexaRequestVerifier.get_validated_cert
     assert (conn.private[:alexa_verify_error])
     assert ConCache.get(:cert_signature_cache, cert_url) == nil
 
@@ -30,7 +26,7 @@ defmodule AlexaRequestVerifierTest do
 
   test "load no cert request " do 
     conn = %Plug.Conn{}
-    conn = AlexaRequestVerifier.get_validated_cert(conn)
+    |> AlexaRequestVerifier.get_validated_cert
     assert String.contains?(conn.private[:alexa_verify_error], "no request parameter")
   end
 
@@ -62,7 +58,14 @@ defmodule AlexaRequestVerifierTest do
  end
 
   
-
+ test "test_mode disables authentication checking" do
+    cert_url = "https://www.foobar.com"
+    conn = %Plug.Conn{}
+    |> Plug.Conn.put_private(:alexa_verify_test_disable, true)
+    |> Plug.Conn.put_req_header("signaturecertchainurl", cert_url)
+    |> AlexaRequestVerifier.call(%{})
+    refute conn.private[:alexa_verify_error]
+  end
 
 
 end
