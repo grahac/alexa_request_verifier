@@ -1,23 +1,34 @@
 defmodule AlexaRequestVerifier do
   @moduledoc """
-  AlexaRequestVerifier verifies an Amazon Alexa Skills request to a Pheonix server.  T
+  AlexaRequestVerifier verifies an Amazon Alexa Skills request to a Pheonix server.  
 
-  the package can be installed by adding `alexa_request_verifier` to your list of dependencies in `mix.exs`:
+To add the request, you will need to make 4 changes:
 
-def deps do
-  [{:alexa_request_verifier, "~> 0.1.0"}]
-end
+1. mix.exs - the package can be installed by adding `alexa_request_verifier` to your list of dependencies in `mix.exs`:
 
-You will also need to modify your Endpoint.ex file by adding the JSONRawBody Parser as follows:
 
-    parsers: [AlexaRequestVerifier.JSONRawBodyParser, :urlencoded, :multipart, :json],
+    def deps do
+      [{:alexa_request_verifier, "~> 0.1.0"}]
+    end
+
+2. You will need to add AlexaRequestVerifier as an application in your mix.js
+
+
+      applications: [..., :alexa_request_verifier] 
+
+
+3.  You will need to modify your endpoint.ex file by adding the JSONRawBody Parser as follows:
+
+      parsers: [AlexaRequestVerifier.JSONRawBodyParser, :urlencoded, :multipart, :json],
 
 The parser is needed to collect the raw body of the request as that is needed to verify the signature.
 
-Finally, you will need to add AlexaRequestVerifier as an application.
+4. You will need to add the verifier plug as 
 
-    applications: [..., :alexa_request_verifier] 
-
+pipeline :alexa_api do
+      plug :accepts, ["json"]
+      plug AlexaRequestVerifier
+  end
 
   """
 
@@ -238,22 +249,22 @@ end
   def verify_signature(conn) do
 
    message = conn.private[:raw_body]
-   [signature] = Plug.Conn.get_req_header(conn, @sig_header)
-   {:ok, signature} = Base.decode64(signature)
-   [first|_tail] = conn.private[:signing_cert]
-    decoded = :public_key.pkix_decode_cert(first,:otp)
+   case sig_list = Plug.Conn.get_req_header(conn, @sig_header) do
+     []  ->   Conn.put_private(conn, :alexa_verify_error, "no signature" )
+     [signature] ->
+     {:ok, signature} = Base.decode64(signature)
+     [first|_tail] = conn.private[:signing_cert]
+      decoded = :public_key.pkix_decode_cert(first,:otp)
 
-    public_key_der = decoded |> elem(1) |> elem(7) |> elem(2)
+      public_key_der = decoded |> elem(1) |> elem(7) |> elem(2)
+     if(:public_key.verify(message, :sha, signature, public_key_der)) do
+      conn
+     else
+      Conn.put_private(conn, :alexa_verify_error, "signature did not match" )
 
+     end
 
-
-
-   if(:public_key.verify(message, :sha, signature, public_key_der)) do
-    conn
-   else
-    Conn.put_private(conn, :alexa_verify_error, "signature did not match" )
-
-   end
+    end
 
     
   end
