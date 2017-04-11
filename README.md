@@ -44,7 +44,5 @@ end
 A big thanks to the Elixir Forum for helping me navigate all of the Erlang :public_key libraries.  [Forum thread](https://elixirforum.com/t/x-509-request-cert-chain-validation-plug-for-alexa-skills/4463/23).
 
 
-Documentation can be generated with [ExDoc](https://github.com/elixir-lang/ex_doc)
-and published on [HexDocs](https://hexdocs.pm). Once published, the docs can
-be found at [https://hexdocs.pm/alexa_request_verifier](https://hexdocs.pm/alexa_request_verifier).
+Documentation can be found at [https://hexdocs.pm/alexa_request_verifier](https://hexdocs.pm/alexa_request_verifier).
 
