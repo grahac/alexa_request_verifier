@@ -41,8 +41,8 @@ end
 ```
 
 ## Kudos
-A big thanks to the Elixir Forum for helping me navigate all of the Erlang :public_key libraries.  [Forum thread](https://elixirforum.com/t/x-509-request-cert-chain-validation-plug-for-alexa-skills/4463/23).
+A big thanks to the Elixir Forum for helping me navigate all of the semi-documented Erlang :public_key libraries.  [Forum thread](https://elixirforum.com/t/x-509-request-cert-chain-validation-plug-for-alexa-skills/4463/23).
 
 
-Documentation can be found at [https://hexdocs.pm/alexa_request_verifier](https://hexdocs.pm/alexa_request_verifier).
+The Hex documentation can be found at [https://hexdocs.pm/alexa_request_verifier](https://hexdocs.pm/alexa_request_verifier).
 

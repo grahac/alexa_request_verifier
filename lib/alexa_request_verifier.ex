@@ -47,25 +47,25 @@ The parser is needed to collect the raw body of the request as that is needed to
 
   def call(conn, _opts) do
 
-     case conn.private[:alexa_verify_test_disable] do
-       true ->
-        conn
-       _ ->
+   case conn.private[:alexa_verify_test_disable] do
+     true ->
+      conn
+     _ ->
 
-      conn = conn  
-      |> get_validated_cert
-      |> verify_time
-      |> verify_signature
-        
-      if conn.private[:alexa_verify_error] do 
-        Logger.debug("alexa_request_verifier: #{conn.private[:alexa_verify_error]}")
-        conn
-          |> send_resp(401, conn.private[:alexa_verify_error])
-          |> halt
-      else
-        conn
-        end
-     end   
+    conn = conn  
+    |> get_validated_cert
+    |> verify_time
+    |> verify_signature
+      
+    if conn.private[:alexa_verify_error] do 
+      Logger.debug("alexa_request_verifier: #{conn.private[:alexa_verify_error]}")
+      conn
+        |> send_resp(401, conn.private[:alexa_verify_error])
+        |> halt
+    else
+      conn
+      end
+   end   
 
 
   end
@@ -112,7 +112,7 @@ end
   
 
   def is_correct_alexa_url?(url) when is_nil(url) do
-   
+      false
   end
 
 
@@ -175,13 +175,9 @@ end
     case :public_key.pkix_path_validation(root_cer, Enum.reverse(cert),
           [{:verify_fun, {&__MODULE__.verify_fun/3, {}}}]) do
       {:ok, {_public_key_info, _policy_tree}} ->
-        
-
-      # IO.inspect public_key_info
         {:ok, cert}
       {:error, {:bad_cert, reason}} ->
-      #  IO.puts "validation failed with bad cert"
-      #  IO.inspect reason
+
         {:error, reason}
     end
   end
