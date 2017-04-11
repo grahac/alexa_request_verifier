@@ -41,7 +41,7 @@ defmodule AlexaRequestVerifier.Mixfile do
     [
     {:phoenix, "~> 1.2.3"}, 
     {:con_cache, "~> 0.12.0"},
-
+    {:ex_doc, ">= 0.0.0", only: :dev}
     ]
   end
 

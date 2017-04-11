@@ -1,6 +1,24 @@
 defmodule AlexaRequestVerifier do
   @moduledoc """
-  Documentation for AlexaRequestVerifier.
+  AlexaRequestVerifier verifies an Amazon Alexa Skills request to a Pheonix server.  T
+
+  the package can be installed by adding `alexa_request_verifier` to your list of dependencies in `mix.exs`:
+
+def deps do
+  [{:alexa_request_verifier, "~> 0.1.0"}]
+end
+
+You will also need to modify your Endpoint.ex file by adding the JSONRawBody Parser as follows:
+
+    parsers: [AlexaRequestVerifier.JSONRawBodyParser, :urlencoded, :multipart, :json],
+
+The parser is needed to collect the raw body of the request as that is needed to verify the signature.
+
+Finally, you will need to add AlexaRequestVerifier as an application.
+
+    applications: [..., :alexa_request_verifier] 
+
+
   """
 
 
