@@ -14,24 +14,29 @@ Alexa Request Verifier uses ConCache to cache certificates once they have been v
 
 ## Installation
 
-If [available in Hex](https://hex.pm/docs/publish), the package can be installed
+1. If [available in Hex](https://hex.pm/docs/publish), the package can be installed
 by adding `alexa_request_verifier` to your list of dependencies in `mix.exs`:
 
 ```elixir
 def deps do
-  [{:alexa_request_verifier, "~> 0.1.0"}]
+  [{:alexa_request_verifier, "~> 0.1.1"}]
 end
 ```
-
-
-You will also need to modify your Endpoint.ex file by changing the parser as follows:
-
-    parsers: [AlexaRequestVerifier.JSONRawBodyParser, :urlencoded, :multipart, :json],
-
-Finally, you will need to add AlexaRequestVerifier as an application.
+2.You will need to add AlexaRequestVerifier as an application in the same mix.exs file.
 
     applications: [..., :alexa_request_verifier] 
 
+
+3. You will also need to modify your endpoint.ex file by changing the parser as follows:
+
+    parsers: [AlexaRequestVerifier.JSONRawBodyParser, :urlencoded, :multipart, :json],
+
+4. You will need to add the verifier plug to your pipeline in your router.ex file
+
+      pipeline :alexa_api do
+          plug :accepts, ["json"]
+          plug AlexaRequestVerifier
+      end
 
 ## Kudos
 A big thanks to the Elixir Forum for helping me navigate all of the Erlang :public_key libraries.  [Forum thread](https://elixirforum.com/t/x-509-request-cert-chain-validation-plug-for-alexa-skills/4463/23).

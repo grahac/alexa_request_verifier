@@ -8,7 +8,7 @@ To add the request, you will need to make 4 changes:
 
 
     def deps do
-      [{:alexa_request_verifier, "~> 0.1.0"}]
+      [{:alexa_request_verifier, "~> 0.1.1"}]
     end
 
 2. You will need to add AlexaRequestVerifier as an application in your mix.js
@@ -23,9 +23,9 @@ To add the request, you will need to make 4 changes:
 
 The parser is needed to collect the raw body of the request as that is needed to verify the signature.
 
-4. You will need to add the verifier plug as 
+4. You will need to add the verifier plug to your pipeline in your router.ex file
 
-pipeline :alexa_api do
+  pipeline :alexa_api do
       plug :accepts, ["json"]
       plug AlexaRequestVerifier
   end
