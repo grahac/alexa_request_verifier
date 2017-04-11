@@ -46,16 +46,14 @@ The parser is needed to collect the raw body of the request as that is needed to
 
 
   def call(conn, _opts) do
-      
-    Logger.info(inspect(conn))
-  
+        
     conn = conn  
     |> get_validated_cert
     |> verify_time
     |> verify_signature
       
     if conn.private[:alexa_verify_error] do 
-      Logger.error("alexa_verify_error: #{conn.private[:alexa_verify_error]}")
+      Logger.debug("alexa_verify_error: #{conn.private[:alexa_verify_error]}")
       conn
         |> send_resp(401, conn.private[:alexa_verify_error])
         |> halt
@@ -82,7 +80,7 @@ The parser is needed to collect the raw body of the request as that is needed to
             Conn.put_private(conn,:signing_cert, cert)
               
         {:error, reason} ->
-            Logger.error("got error: #{reason}")
+            Logger.debug("got error: #{reason}")
             Conn.put_private(conn, :alexa_verify_error, reason )
               
           end
