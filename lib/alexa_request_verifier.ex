@@ -265,6 +265,8 @@ end
 
       public_key_der = decoded |> elem(1) |> elem(7) |> elem(2)
      if(:public_key.verify(message, :sha, signature, public_key_der)) do
+      Logger.debug("AlexaRequestVerifier: Signature of Alexa request is valid for this message.")
+
       conn
      else
       Conn.put_private(conn, :alexa_verify_error, "signature did not match" )
