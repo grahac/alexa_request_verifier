@@ -248,31 +248,36 @@ end
   @doc """
     Assuming :raw_body, :signing_cert, and signature header, it will verify the signature
   """
+
+  
   def verify_signature(conn) do
+    case conn.private[:signing_cert] do
+     
+     nil-> 
+      Conn.put_private(conn, :alexa_verify_error, "invalid certificate" )
+     _ ->
+      verify_signature_with_valid_cert(conn)
+    end
+ 
+  end
+
+  def verify_signature_with_valid_cert(conn) do 
 
    message = conn.private[:raw_body]
    case Plug.Conn.get_req_header(conn, @sig_header) do
-     []  ->   Conn.put_private(conn, :alexa_verify_error, "no signature" )
-     [signature] ->
-     {:ok, signature} = Base.decode64(signature)
-     [first|_tail] = conn.private[:signing_cert]
+    []  ->   Conn.put_private(conn, :alexa_verify_error, "no signature" )
+    [signature] ->
+      {:ok, signature} = Base.decode64(signature)
+      [first|_tail] = conn.private[:signing_cert]
       decoded = :public_key.pkix_decode_cert(first,:otp)
-
       public_key_der = decoded |> elem(1) |> elem(7) |> elem(2)
-     if(:public_key.verify(message, :sha, signature, public_key_der)) do
-      Logger.debug("alexa_request_verifier: Signature of Alexa request is valid for this message.")
 
-      conn
-     else
-      Conn.put_private(conn, :alexa_verify_error, "signature did not match" )
-
-     end
-
-    end
-
-    
-  end
-
- 
-
+      if(!is_nil(public_key_der) and :public_key.verify(message, :sha, signature, public_key_der)) do
+        Logger.debug("alexa_request_verifier: Signature of Alexa request is valid for this message.")
+        conn
+      else
+        Conn.put_private(conn, :alexa_verify_error, "signature did not match" )
+      end
+   end
+ end
 end

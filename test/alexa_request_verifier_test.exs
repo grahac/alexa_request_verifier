@@ -24,11 +24,27 @@ defmodule AlexaRequestVerifierTest do
   end
 
 
+
+  test "load bad cache test " do 
+    cert_url = "https://s3.amazonaws.com/echo.api/echo-api-cert.pem"
+    conn = %Plug.Conn{}
+    |> Plug.Conn.put_req_header("signaturecertchainurl", cert_url)
+    |> Plug.Conn.put_req_header("signature", "M4Xq8WmUHjaR4Fgj9HUheoOUkZf4tkc5koBtkBq/nCmh4X6EiimBXWa7p+kHoMx9noTdytGSUREaxYofTne1CzYOW0wxb9x6Jhor6lMwHAr4cY+aR1AEOkWrjsP94bewRr1/CxYNl7kGcj4+QjbEa/7dL19BNmLiufMLZDdRFsZSzlfXpPaAspsoStqVc/qc26tj5R9wtB0sTS4wbFc4eyCPFaCZocq1gmjfR3YQXupuD7J3slrz54SxukNmL/M1CIoZ8lOXjS82XLkKjsrzXdY5ePk8XsEDjNWkFSLbqzBzGBqzWx4M913uDA6gPx5tFKeoP8FgpV+BHKDf3d4gmQ==")
+    |> Plug.Conn.put_private(:raw_body, "foobar" )
+    |> AlexaRequestVerifier.verify_signature
+    assert (conn.private[:alexa_verify_error])
+    assert ConCache.get(:cert_signature_cache, cert_url) == nil
+
+
+  end
+
+
   test "load no cert request " do 
     conn = %Plug.Conn{}
     |> AlexaRequestVerifier.get_validated_cert
     assert String.contains?(conn.private[:alexa_verify_error], "no request parameter")
   end
+
 
 
 
@@ -57,7 +73,13 @@ defmodule AlexaRequestVerifierTest do
 
  end
 
+
   
+
+  
+
+
+
  test "test_mode disables authentication checking" do
     cert_url = "https://www.foobar.com"
     conn = %Plug.Conn{}
