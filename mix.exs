@@ -18,7 +18,8 @@ defmodule AlexaRequestVerifier.Mixfile do
   # Type "mix help compile.app" for more information
   def application do
     # Specify extra applications you'll use from Erlang/Elixir
-    [extra_applications: [:logger, :con_cache],
+    [extra_applications: [:logger, :con_cache,
+                    :inets],
      mod: {AlexaRequestVerifier.Application, []}]
   end
 
@@ -39,9 +40,9 @@ defmodule AlexaRequestVerifier.Mixfile do
   # Type "mix help deps" for more examples and options
   defp deps do
     [
-    {:phoenix, "~> 1.2.3"}, 
-    {:con_cache, "~> 0.12.0"},
-    {:ex_doc, ">= 0.0.0", only: :dev}
+      {:phoenix, "~> 1.3"},
+      {:con_cache, "~> 0.12.0"},
+      {:ex_doc, ">= 0.0.0", only: :dev}
     ]
   end
 
