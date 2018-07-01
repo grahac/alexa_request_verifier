@@ -2,7 +2,7 @@ defmodule AlexaRequestVerifierTest do
   use ExUnit.Case
   doctest AlexaRequestVerifier
 
-  test "load, verified cert and test caching " do 
+  test "load, verified cert and test caching " do
     cert_url = "https://s3.amazonaws.com/echo.api/echo-api-cert-4.pem"
     conn = %Plug.Conn{}
     |> Plug.Conn.put_req_header("signaturecertchainurl", cert_url )
@@ -12,7 +12,7 @@ defmodule AlexaRequestVerifierTest do
     assert AlexaRequestVerifier.get_validated_cert(conn).private[:signing_cert] == cert
   end
 
-  test "load, bad cert and test no caching " do 
+  test "load, bad cert and test no caching " do
     cert_url = "https://s3.amazonaws.com/echo.api/echo-api-cert.pem"
     conn = %Plug.Conn{}
     |> Plug.Conn.put_req_header("signaturecertchainurl", cert_url)
@@ -23,9 +23,15 @@ defmodule AlexaRequestVerifierTest do
 
   end
 
+  test "known good cert signature" do
+    signature = "a/T+f9igAMdTgJl+kwwSFb5SKmlkRAAdZx6dMSQeb8eWBB/ZpZ8Fxlbq2SEmZIt8gLNvh/11IrWqtlIwhT9atZRM7ETnpybzsF6QBGlyRkVSi19/kalgiNMOFJ4ohANpeDeLMwUpZ5EpbuTz0G/oR3UpjFB05NoIeVuW0GT8JZD8k0DLJ6zYC2FsoA5UyJv/rabdrJlpRR+M3Hx/SE9XfHHrTOtJ9HJnKZBbHjqnrOD2MogWHmStwAeOjFRuXnO4fR+B1E6ax3A93nv8uLlapIQ9kgV3qOEJCFi74xE+MLczXRa/rLHQB1EnG3qa1pGQBCBoNQGEuPtIC1eAiM42Sg=="
+    chain_url = "https://s3.amazonaws.com/echo.api/echo-api-cert-6-ats.pem"
+    cert = AlexaRequestVerifier.fetch_cert("https://s3.amazonaws.com/echo.api/echo-api-cert-6-ats.pem")
+    {:ok, _} = AlexaRequestVerifier.validate_cert_chain(cert)
+  end
 
 
-  test "load bad cache test " do 
+  test "load bad cache test " do
     cert_url = "https://s3.amazonaws.com/echo.api/echo-api-cert.pem"
     conn = %Plug.Conn{}
     |> Plug.Conn.put_req_header("signaturecertchainurl", cert_url)
@@ -39,7 +45,7 @@ defmodule AlexaRequestVerifierTest do
   end
 
 
-  test "load no cert request " do 
+  test "load no cert request " do
     conn = %Plug.Conn{}
     |> AlexaRequestVerifier.get_validated_cert
     assert String.contains?(conn.private[:alexa_verify_error], "no request parameter")
@@ -47,9 +53,7 @@ defmodule AlexaRequestVerifierTest do
 
 
 
-
-
-  test "is_datetime_valid tests " do 
+  test "is_datetime_valid tests " do
     refute AlexaRequestVerifier.is_datetime_valid?(nil)
     refute AlexaRequestVerifier.is_datetime_valid?("")
     refute AlexaRequestVerifier.is_datetime_valid?("2016-03-20T19:03:53Z")
@@ -69,14 +73,15 @@ defmodule AlexaRequestVerifierTest do
    assert AlexaRequestVerifier.is_correct_alexa_url?("https://s3.amazonaws.com/echo.api/echo-api-cert.pem")
    assert AlexaRequestVerifier.is_correct_alexa_url?("https://s3.amazonaws.com/echo.api/echo-api-cert4.pem")
    assert AlexaRequestVerifier.is_correct_alexa_url?("https://s3.amazonaws.com/echo.api/../echo.api/echo-api-cert.pem")
-   
+   assert AlexaRequestVerifier.is_correct_alexa_url?("https://s3.amazonaws.com/echo.api/echo-api-cert-6-ats.pem")
+
 
  end
 
 
-  
 
-  
+
+
 
 
 
