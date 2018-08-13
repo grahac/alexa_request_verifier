@@ -4,8 +4,8 @@ defmodule AlexaRequestVerifier.Mixfile do
 
   def project do
     [app: :alexa_request_verifier,
-     version: "0.1.5",
-     elixir: "~> 1.4",
+     version: "0.1.6",
+     elixir: "~> 1.7",
      build_embedded: Mix.env == :prod,
      start_permanent: Mix.env == :prod,
      description: description(),
@@ -42,7 +42,7 @@ defmodule AlexaRequestVerifier.Mixfile do
     [
       {:phoenix, "~> 1.3"},
       {:con_cache, "~> 0.12.0"},
-      {:ex_doc, ">= 0.0.0", only: :dev}
+      {:ex_doc, "~> 0.19.0", only: :dev, runtime: false}
     ]
   end
 

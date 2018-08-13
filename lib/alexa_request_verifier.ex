@@ -1,37 +1,35 @@
 defmodule AlexaRequestVerifier do
   @moduledoc """
-  AlexaRequestVerifier verifies an Amazon Alexa Skills request to a Pheonix server.
+      AlexaRequestVerifier verifies an Amazon Alexa Skills request to a Pheonix server.
 
-To add the request, you will need to make 4 changes:
+      To add the request, you will need to make 4 changes:
 
-1. mix.exs - the package can be installed by adding `alexa_request_verifier` to your list of dependencies in `mix.exs`:
-
-
-    def deps do
-      [{:alexa_request_verifier, "~> 0.1.3"}]
-    end
-
-2. You will need to add AlexaRequestVerifier as an application in your mix.js
+      1. mix.exs - the package can be installed by adding `alexa_request_verifier` to your list of dependencies in `mix.exs`:
 
 
-      applications: [..., :alexa_request_verifier]
+          def deps do
+            [{:alexa_request_verifier, "~> 0.1.3"}]
+          end
+
+      2. You will need to add AlexaRequestVerifier as an application in your mix.js
 
 
-3.  You will need to modify your endpoint.ex file by adding the JSONRawBody Parser as follows:
+            applications: [..., :alexa_request_verifier]
 
-      parsers: [AlexaRequestVerifier.JSONRawBodyParser, :urlencoded, :multipart, :json],
 
-The parser is needed to collect the raw body of the request as that is needed to verify the signature.
+      3.  You will need to modify your endpoint.ex file by adding the JSONRawBody Parser as follows:
 
-4. You will need to add the verifier plug to your pipeline in your router.ex file
+            parsers: [AlexaRequestVerifier.JSONRawBodyParser, :urlencoded, :multipart, :json],
 
-  pipeline :alexa_api do
-      plug :accepts, ["json"]
-      plug AlexaRequestVerifier
-  end
+      The parser is needed to collect the raw body of the request as that is needed to verify the signature.
 
+      4. You will need to add the verifier plug to your pipeline in your router.ex file
+
+        pipeline :alexa_api do
+            plug :accepts, ["json"]
+            plug AlexaRequestVerifier
+        end
   """
-
   # this config list is from: https://aws.amazon.com/blogs/security/how-to-prepare-for-aws-move-to-its-own-certificate-authority/?mkt_tok=eyJpIjoiTkdaa05UVTJabUpsT0RSaSIsInQiOiI1dmhhZHpxVHRlRnZuZktWRDVGNk44czlCT21odWxDeWxrVmZSbHNoVWdcLzZsdTh3clQwNEd4N1ZEYXhrZDFjY085R0w2aVwvUTFtV3pEd0Yxa1JvalhzTlVDV1Z0SXZvc01ZQU5zbnMweW1PdWIwcXBTMU9kUjNcL29KMDhMcm9taiJ9
 
 @root_cas [
