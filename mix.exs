@@ -1,16 +1,17 @@
 defmodule AlexaRequestVerifier.Mixfile do
   use Mix.Project
 
-
   def project do
-    [app: :alexa_request_verifier,
-     version: "0.1.6",
-     elixir: "~> 1.7",
-     build_embedded: Mix.env == :prod,
-     start_permanent: Mix.env == :prod,
-     description: description(),
-     package: package(),
-     deps: deps()]
+    [
+      app: :alexa_request_verifier,
+      version: "0.1.6",
+      elixir: "~> 1.7",
+      build_embedded: Mix.env() == :prod,
+      start_permanent: Mix.env() == :prod,
+      description: description(),
+      package: package(),
+      deps: deps()
+    ]
   end
 
   # Configuration for the OTP application
@@ -18,12 +19,13 @@ defmodule AlexaRequestVerifier.Mixfile do
   # Type "mix help compile.app" for more information
   def application do
     # Specify extra applications you'll use from Erlang/Elixir
-    [extra_applications: [:logger, :con_cache,
-                    :inets],
-     mod: {AlexaRequestVerifier.Application, []}]
+    [
+      extra_applications: [:logger, :con_cache, :inets],
+      mod: {AlexaRequestVerifier.Application, []}
+    ]
   end
 
- defp description do
+  defp description do
     """
     Alexa Request Verifier is a library that handles all of the certificate and request verification for Alexa Requests for certified skills. (See the Alexa Skills Documentation for more information).
     """
@@ -45,7 +47,6 @@ defmodule AlexaRequestVerifier.Mixfile do
       {:ex_doc, "~> 0.19.0", only: :dev, runtime: false}
     ]
   end
-
 
   defp package do
     [
