@@ -27,14 +27,11 @@ defmodule AlexaRequestVerifierTest do
     assert ConCache.get(:cert_signature_cache, cert_url) == nil
   end
 
+  # This one is valid until May 22, 2020
+  @good_url "https://s3.amazonaws.com/echo.api/echo-api-cert-7.pem"
+
   test "known good cert signature" do
-    signature =
-      "a/T+f9igAMdTgJl+kwwSFb5SKmlkRAAdZx6dMSQeb8eWBB/ZpZ8Fxlbq2SEmZIt8gLNvh/11IrWqtlIwhT9atZRM7ETnpybzsF6QBGlyRkVSi19/kalgiNMOFJ4ohANpeDeLMwUpZ5EpbuTz0G/oR3UpjFB05NoIeVuW0GT8JZD8k0DLJ6zYC2FsoA5UyJv/rabdrJlpRR+M3Hx/SE9XfHHrTOtJ9HJnKZBbHjqnrOD2MogWHmStwAeOjFRuXnO4fR+B1E6ax3A93nv8uLlapIQ9kgV3qOEJCFi74xE+MLczXRa/rLHQB1EnG3qa1pGQBCBoNQGEuPtIC1eAiM42Sg=="
-
-    chain_url = "https://s3.amazonaws.com/echo.api/echo-api-cert-6-ats.pem"
-
-    cert =
-      AlexaRequestVerifier.fetch_cert("https://s3.amazonaws.com/echo.api/echo-api-cert-6-ats.pem")
+    cert = AlexaRequestVerifier.fetch_cert(@good_url)
 
     {:ok, _} = AlexaRequestVerifier.validate_cert_chain(cert)
   end
