@@ -45,7 +45,7 @@ defmodule AlexaRequestVerifier.Mixfile do
       {:plug, "~> 1.8"},
       {:certifi, "~> 2.5"},
       {:ssl_verify_fun, "~> 1.1"},
-      {:con_cache, "~> 0.12.0"},
+      {:con_cache, "~> 0.14"},
       {:ex_doc, "~> 0.19.0", only: :dev, runtime: false}
     ]
   end
