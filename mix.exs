@@ -42,7 +42,7 @@ defmodule AlexaRequestVerifier.Mixfile do
   # Type "mix help deps" for more examples and options
   defp deps do
     [
-      {:phoenix, "~> 1.3"},
+      {:plug, "~> 1.8"},
       {:certifi, "~> 2.5"},
       {:ssl_verify_fun, "~> 1.1"},
       {:con_cache, "~> 0.12.0"},
