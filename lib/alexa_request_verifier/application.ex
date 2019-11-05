@@ -12,7 +12,7 @@ defmodule AlexaRequestVerifier.Application do
     children = [
       # Starts a worker by calling: AlexaRequestVerifier.Worker.start_link(arg1, arg2, arg3)
       # worker(AlexaRequestVerifier.Worker, [arg1, arg2, arg3]),
-       supervisor(ConCache, [[], [name: :cert_signature_cache]])
+      supervisor(ConCache, [[name: :cert_signature_cache, ttl_check_interval: false]])
     ]
 
     # See http://elixir-lang.org/docs/stable/elixir/Supervisor.html
